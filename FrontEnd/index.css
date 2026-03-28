@@ -1,0 +1,80 @@
+body{
+    background-color: rgb(18,18,19);
+    border-bottom-color: rgb(0,0,0);
+    border-left-color: rgb(0,0,0);
+    border-right-color: rgb(0,0,0);
+    border-top-color: rgb(0,0,0);
+    font-family: "Clear Sans" , "Helcetica Neue" , Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-stretch: 100%;
+    font-weight: 400;
+}
+nav{
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border: unset;
+    border-bottom: 1px solid #424242;
+}
+.spaceInNav{
+    width: 94%;
+}
+.nav2{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    
+}
+.gr{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    width: 320px;
+    height:320px;
+    gap: 10px;
+    padding-bottom: 3%;
+    
+}
+.box{
+    /* background-color:  rgb(171, 192, 96); */
+    border-color: #f4eded;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 7px;
+    
+
+}
+.play-area{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+.keyboard{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.qwerty{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.asdf{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.zxcv{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
