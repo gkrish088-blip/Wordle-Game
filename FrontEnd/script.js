@@ -36,6 +36,7 @@ let currentCol;
 let currentGuess = '';
 let gameOver = true;
 let isrowComplete = false;
+
 const wordsarray = [
   "ABACUS",
   "ABASED",
@@ -5225,8 +5226,7 @@ function onclickKeyboardKey(element) {
 document.addEventListener("keydown",  (e) => {
     handleInput(e.key);
 })
-startgame()
-gameplay()
+
 function handleInput(key){
     if(key.charCodeAt(0) <= 122 && key.charCodeAt(0) >= 97){
         console.log(key);
@@ -5238,6 +5238,7 @@ function handleInput(key){
         console.log(key)
         handleBackspace()
     }
+
 }
 function handleAlphaInput(alpha){
     if(isrowComplete) {return}
@@ -5276,7 +5277,31 @@ function handleEnter(guess , target){
     currentRow++
     isrowComplete = false
     currentGuess = ""
-    
     }
-
 }
+function addingColors(guess , target){
+    for (let i = 0; i < 6; i++) {
+        // if(guess[i] == target[i]){
+        //     grid[currentRow][i].style.backgroundColor = "#538D4E"
+        // }
+        for (let j = 0; j < 6; j++) {
+            if(guess[j] == target[i])
+            {
+                if(i == j)
+                {
+                    grid[currentRow][j].style.backgroundColor = "#538D4E"
+                }else
+                {
+                    grid[currentRow][j].style.backgroundColor = "#B59F3B"
+                }
+            }                    
+        }
+    }
+}
+function addingBorderToCurrentCell(){
+    grid[currentRow][currentCol].style.borderWidth = "3px";
+    grid[currentRow][currentCol-1].style.borderWidth = "0.5px";
+}
+
+startgame()
+gameplay()
