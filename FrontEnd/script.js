@@ -5279,23 +5279,38 @@ function handleEnter(guess , target){
     currentGuess = ""
     }
 }
-function addingColors(guess , target){
+
+var Colored = false
+
+function addingColors(guess , target)
+{
     for (let i = 0; i < 6; i++) {
         // if(guess[i] == target[i]){
         //     grid[currentRow][i].style.backgroundColor = "#538D4E"
         // }
         for (let j = 0; j < 6; j++) {
-            if(guess[j] == target[i])
+            if(guess[i] == target[j])
             {
                 if(i == j)
                 {
-                    grid[currentRow][j].style.backgroundColor = "#538D4E"
-                }else
+                    grid[currentRow][i].style.backgroundColor = "#538D4E"
+                    Colored = true
+                }    
+                else
                 {
-                    grid[currentRow][j].style.backgroundColor = "#B59F3B"
+                    grid[currentRow][i].style.backgroundColor = "#B59F3B"
+                    Colored = true   
                 }
-            }                    
+            }
+            else if(!Colored)
+            {
+                grid[currentRow][i].style.backgroundColor = "#3A3A3C"
+            }
+
         }
+
+        Colored = false
+
     }
 }
 function addingBorderToCurrentCell(){
