@@ -33,8 +33,9 @@ function createKeyMap(rowName) {
 
 let currentRow;
 let currentCol;
-let currentGuess;
+let currentGuess = '';
 let gameOver = true;
+let isrowComplete = false;
 const wordsarray = [
   "ABACUS",
   "ABASED",
@@ -5227,14 +5228,55 @@ document.addEventListener("keydown",  (e) => {
 startgame()
 gameplay()
 function handleInput(key){
-    const row = currentRow
-    const col = currentCol
     if(key.charCodeAt(0) <= 122 && key.charCodeAt(0) >= 97){
         console.log(key);
-        grid[row][col].innerHTML = `${key}`
+        handleAlphaInput(key)
     }else if (key == "Enter"){
         console.log(key)
+        handleEnter(currentGuess.toUpperCase())
     }else if (key == "Backspace"){
         console.log(key)
+        handleBackspace()
     }
+}
+function handleAlphaInput(alpha){
+    if(isrowComplete) {return}
+    grid[currentRow][currentCol].innerHTML = `${alpha}`;
+    currentGuess = currentGuess + alpha;
+    if(currentCol == 5){
+        isrowComplete = true;
+    }
+    else{
+        currentCol++
+    }
+}
+function handleBackspace(){
+    if(currentCol>0){
+    if(!isrowComplete){
+        currentCol--;
+        grid[currentRow][currentCol].innerHTML = ''
+    }
+    if(isrowComplete){
+        grid[currentRow][currentCol].innerHTML = ''
+        isrowComplete = false;
+    }
+    currentGuess = currentGuess.slice(0,-1);}
+}
+const validWords = new Set(wordsarray)
+function handleEnter(guess , target){
+    if(!isrowComplete){return}
+    if(!validWords.has(guess)){
+        console.log("Not in the word list")
+        return;
+    }else{
+    if(guess == target){
+        console.log("You Won")
+    }
+    currentCol = 0 
+    currentRow++
+    isrowComplete = false
+    currentGuess = ""
+    
+    }
+
 }
