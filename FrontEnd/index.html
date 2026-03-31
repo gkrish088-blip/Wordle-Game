@@ -23,7 +23,7 @@
     </nav>
     <div class="play-area">
         <div class="gr">
-            <div class="r1c1 box"></div>
+            <div class="r1c1 box" id="firstCol"></div>
             <div class="r1c2 box"></div>
             <div class="r1c3 box"></div>
             <div class="r1c4 box"></div>
@@ -53,6 +53,11 @@
             <div class="r5c4 box"></div>
             <div class="r5c5 box"></div>
             <div class="r5c6 box"></div>
+            <div class="message-overlay">
+                <div class="message">
+                    <p>Not in the words list</p>
+                </div>
+            </div>
         </div>
         <div class="keyboard">
             <div class="qwerty">
@@ -93,6 +98,13 @@
     </div>
     <div class="footer">
 
+    </div>
+    <div id="win-overlay">
+        <div class="win-modal">
+            <h2>Congratulations</h2>
+            <p>You Guessed the word!!</p>
+            <button onclick="closeWinModal()">Close</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

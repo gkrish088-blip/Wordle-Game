@@ -1,12 +1,12 @@
 const grid = [];
-const keyboard = [[], [], [], [],[]];
+const keyboard = [[], [], [], [], []];
 const ROWS = 5;
 const COLS = 6;
 function createGridMap() {
   for (let i = 0; i < ROWS; i++) {
     grid[i] = [];
     for (let j = 0; j < COLS; j++) {
-      grid[i][j] = document.querySelector(`.r${i+1}c${j+1}`);
+      grid[i][j] = document.querySelector(`.r${i + 1}c${j + 1}`);
       //grid[i][j].innerText = `${i}${j}`
     }
   }
@@ -20,20 +20,19 @@ function createKeyMap(rowName) {
     row = 1;
   } else if (rowname === "ZXCVBNM") {
     row = 2;
-  }else if (rowname === "enter") {
+  } else if (rowname === "enter") {
     keyboard[3] = document.querySelector("#enter");
     keyboard[4] = document.querySelector("#delete");
-    return
+    return;
   }
   for (let i = 0; i < rowname.length; i++) {
     keyboard[row][i] = document.querySelector(`.${rowname[i]}`);
   }
-
 }
-
+let Target;
 let currentRow;
 let currentCol;
-let currentGuess = '';
+let currentGuess = "";
 let gameOver = true;
 let isrowComplete = false;
 
@@ -5185,7 +5184,7 @@ function refreshPage() {
   location.reload();
 }
 function selectTargetWord() {
-  const fixedTimeStamp = 1774644872959;
+  const fixedTimeStamp = 1774533072959;
   const nowTimeStamp = Date.now();
   const daysDiff = Math.floor((nowTimeStamp - fixedTimeStamp) / 86400000);
   const randNo = djb2Hash(String(daysDiff)) % wordsarray.length;
@@ -5201,7 +5200,7 @@ function djb2Hash(str) {
 }
 
 function gameplay() {
-  const target = String(startgame());
+  Target = String(startgame());
   currentCol = 0;
   currentRow = 0;
   gameOver = false;
@@ -5209,114 +5208,269 @@ function gameplay() {
 }
 
 function onclickKeyboardKey(element) {
-    const key = element.classList[0];
-    var keyout;
-    if (element) {
+  const key = element.classList[0];
+  var keyout;
+  if (element) {
     if (key.length == 1) {
-      keyout =  String(key).toLowerCase();
+      keyout = String(key).toLowerCase();
     } else if (key == "enter") {
-      keyout= "Enter";
+      keyout = "Enter";
     } else if (key == "delete") {
-        keyout= "Backspace";
+      keyout = "Backspace";
     }
   }
   handleInput(keyout);
 }
 //document.addEventListener("keydown" , onclickKeyboardKey)
-document.addEventListener("keydown",  (e) => {
-    handleInput(e.key);
-})
+document.addEventListener("keydown", (e) => {
+  handleInput(e.key);
+});
 
-function handleInput(key){
-    if(key.charCodeAt(0) <= 122 && key.charCodeAt(0) >= 97){
-        console.log(key);
-        handleAlphaInput(key)
-    }else if (key == "Enter"){
-        console.log(key)
-        handleEnter(currentGuess.toUpperCase())
-    }else if (key == "Backspace"){
-        console.log(key)
-        handleBackspace()
-    }
-
+function handleInput(key) {
+  if (key.charCodeAt(0) <= 122 && key.charCodeAt(0) >= 97) {
+    //console.log(key);
+    handleAlphaInput(key);
+    
+  } else if (key == "Enter") {
+    //console.log(key);
+    handleEnter(currentGuess.toUpperCase(), Target);
+    addingBorderToCurrentCell("enter")
+  } else if (key == "Backspace") {
+    //console.log(key);
+    addingBorderToCurrentCell("backspace")
+    handleBackspace();
+    
+  }
 }
-function handleAlphaInput(alpha){
-    if(isrowComplete) {return}
-    grid[currentRow][currentCol].innerHTML = `${alpha}`;
-    currentGuess = currentGuess + alpha;
-    if(currentCol == 5){
-        isrowComplete = true;
-    }
-    else{
-        currentCol++
-    }
+function handleAlphaInput(alpha) {
+  if (isrowComplete) {
+    return;
+  }
+  grid[currentRow][currentCol].innerHTML = `${alpha}`;
+  grid[currentRow][currentCol].id = `${alpha}-${currentRow}`
+  currentGuess = currentGuess + alpha;
+  if (currentCol == 5) {
+    isrowComplete = true;
+  } else {
+    currentCol++;
+    
+  }
+  addingBorderToCurrentCell("alpha")
 }
-function handleBackspace(){
-    if(currentCol>0){
-    if(!isrowComplete){
-        currentCol--;
-        grid[currentRow][currentCol].innerHTML = ''
+function handleBackspace() {
+  if (currentCol > 0) {
+    if (!isrowComplete) {
+      currentCol--;
+      grid[currentRow][currentCol].innerHTML = "";
+      grid[currentRow][currentCol].style.borderWidth = "3px"
+      grid[currentRow][currentCol+1].style.borderWidth = "0.5px"
     }
-    if(isrowComplete){
-        grid[currentRow][currentCol].innerHTML = ''
-        isrowComplete = false;
+    if (isrowComplete) {
+      grid[currentRow][currentCol].innerHTML = "";
+      isrowComplete = false;
     }
-    currentGuess = currentGuess.slice(0,-1);}
+    currentGuess = currentGuess.slice(0, -1);
+  }
+ 
 }
-const validWords = new Set(wordsarray)
-function handleEnter(guess , target){
-    if(!isrowComplete){return}
-    if(!validWords.has(guess)){
-        console.log("Not in the word list")
-        return;
-    }else{
-    if(guess == target){
-        console.log("You Won")
+const validWords = new Set(wordsarray);
+function handleEnter(guess, target) {
+  console.log(`${guess} ${target}`);
+  if (!isrowComplete) {
+    return;
+  }
+  if (!validWords.has(guess)) {
+    console.log("Not in the word list");
+    notInDictionary();
+    return;
+  } else {
+    addingColors(guess, target);
+    handleYellow(String(guess))
+    if (guess == target) {
+      console.log("You Won");
+      winningfn();
+      return;
+    } else {
+      if (currentRow == 4) {
+        console.log("You lost");
+        loosingfn();
+      } else {
+        console.log("Next line");
+      }
     }
-    currentCol = 0 
-    currentRow++
-    isrowComplete = false
-    currentGuess = ""
-    }
+
+    currentCol = 0;
+    currentRow++;
+    isrowComplete = false;
+    currentGuess = "";
+  }
 }
 
-var Colored = false
+// var Colored = false;
 
-function addingColors(guess , target)
-{
-    for (let i = 0; i < 6; i++) {
-        // if(guess[i] == target[i]){
-        //     grid[currentRow][i].style.backgroundColor = "#538D4E"
-        // }
-        for (let j = 0; j < 6; j++) {
-            if(guess[i] == target[j])
-            {
-                if(i == j)
-                {
-                    grid[currentRow][i].style.backgroundColor = "#538D4E"
-                    Colored = true
-                }    
-                else
-                {
-                    grid[currentRow][i].style.backgroundColor = "#B59F3B"
-                    Colored = true   
-                }
-            }
-            else if(!Colored)
-            {
-                grid[currentRow][i].style.backgroundColor = "#3A3A3C"
-            }
+// function addingColors(guess, target) {
+//   var GreenColored = [];
+//   var Yellowcolored = [];
 
+//   for (let i = 0; i < 6; i++) {
+//     // if(guess[i] == target[i]){
+//     //     grid[currentRow][i].style.backgroundColor = "#538D4E"
+//     // }
+//     for (let j = 0; j < 6; j++) {
+//       if (guess[i] == target[j]) {
+//         if (i == j) {
+//           grid[currentRow][i].style.backgroundColor = "#538D4E";
+//           Colored = true;
+//         } else {
+//           grid[currentRow][i].style.backgroundColor = "#B59F3B";
+//           Colored = true;
+//         }
+//       } else if (!Colored) {
+//         console.log(grid[currentRow][i].innerText.toUpperCase());
+//         grid[currentRow][i].style.backgroundColor = "#3A3A3C";
+
+//         document.querySelector(`.${(String(grid[currentRow][i].innerText).toUpperCase())}`).style.backgroundColor = "#3A3A3A"
+//       }
+//     }
+
+//     Colored = false;
+//   }
+// }
+
+let keyStates = Array(26).fill(0);
+
+let greenIndex = []
+
+function addingColors(guess, target) {
+  console.log(guess)
+
+  for (let i = 0; i < 6; i++) {
+    grid[currentRow][i].style.backgroundColor = "#3A3A3C";
+  }
+
+  for (let i = 0; i < 6; i++) {
+    for (let j = 0; j < 6; j++) {
+      if(guess[i] == target[j])
+      {
+        if(i == j)
+        {
+          grid[currentRow][i].style.backgroundColor = "#538D4E";
+          
+          keyStates[guess[i].charCodeAt(0) - 65] = 3;
+        
+          greenIndex.push(i)
+          
         }
-
-        Colored = false
+        else
+        {
+          
+          //grid[currentRow][i].style.backgroundColor = "#B59F3B";
+          console.log(guess[i])
+          //yellowWords.push(guess[i])
+          keyStates[guess[i].charCodeAt(0) - 65] = Math.max(keyStates[guess[i].charCodeAt(0) - 65], 2);
+        }
+      }
+      else
+      {
+        keyStates[guess[i].charCodeAt(0) - 65] = Math.max(keyStates[guess[i].charCodeAt(0) - 65], 1);       
+      }
 
     }
+
+  }
+  console.log(keyStates);
+
+  for(let i=0; i<26; i++)
+  {
+    const asciiNum = i + 65
+    const char = String.fromCharCode(asciiNum);
+
+    if(keyStates[i] == 3)
+    {  
+      document.querySelector(`.${char}`).style.backgroundColor = "#538D4E"
+    }
+    else if(keyStates[i] == 2)
+    {
+      document.querySelector(`.${char}`).style.backgroundColor = "#B59F3B"
+    }else if(keyStates[i] == 1)
+    {
+      document.querySelector(`.${char}`).style.backgroundColor = "#3A3A3C"
+    }
+  }
+
+
+
+
 }
-function addingBorderToCurrentCell(){
-    grid[currentRow][currentCol].style.borderWidth = "3px";
-    grid[currentRow][currentCol-1].style.borderWidth = "0.5px";
+function handleYellow(guess){
+  var newTr = Target;
+  for (let i = 0; i < greenIndex.length; i++) {
+    newTr = String(newTr).replace(String(newTr[greenIndex[i]]),".")    
+  }
+  newTr = newTr.replaceAll("." , "")
+  console.log(newTr)
+  var newGuess = guess;
+    for (let i = 0; i < greenIndex.length; i++) {
+    newGuess = String(newGuess).replace(String(newGuess[greenIndex[i]]),".")    
+  }
+  newGuess = newGuess.replaceAll(".","")
+
+  console.log(newGuess)
+
+  for (let i = 0; i < newGuess.length; i++) {
+    for (let j = 0; j < newTr.length; j++) {
+     if(newGuess[i] == newTr[j]){
+      console.log(`${newGuess[i]} is Yellow`)
+      document.querySelector(`#${newGuess[i].toLowerCase()}-${currentRow}`).style.backgroundColor = "#B59F3B"
+      document.querySelector(`.${newGuess[i].toUpperCase()}`).style.backgroundColor = "#B59F3B"
+      newTr = String(newTr).replace(String(newTr[j]),"")
+      newGuess = String(newGuess).replace(String(newGuess[i]),"")
+     }
+    }
+    
+  }
+  console.log(newTr)
+  console.log(newGuess)
+  greenIndex = []
 }
 
-startgame()
-gameplay()
+
+
+function addingBorderToCurrentCell(command) {
+  if(command == "alpha"){
+    grid[currentRow][currentCol].style.borderWidth = "3px"
+    grid[currentRow][currentCol-1].style.borderWidth = "0.5px"
+
+  }else if(command == "enter"){
+    grid[currentRow][currentCol].style.borderWidth = "3px"
+    grid[currentRow-1][5].style.borderWidth = "0.5px"
+
+  }else if(command == "backspace"){
+    if(isrowComplete){return}
+
+  }
+}
+
+startgame();
+gameplay();
+
+function winningfn() {
+  document.querySelector("#win-overlay").style.display = "flex";
+}
+function loosingfn() {
+  document.querySelector(".win-modal").innerHTML = `
+                <h2>Ops!</h2>
+            <p>Better luck next time</p>
+            <button onclick="closeWinModal()">Close</button>`;
+  document.querySelector("#win-overlay").style.display = "flex";
+}
+async function notInDictionary() {
+  document.querySelector(".message-overlay").style.display = "flex";
+  setTimeout(() => {
+    document.querySelector(".message-overlay").style.display = "none";
+  }, 500);
+}
+function closeWinModal() {
+  document.querySelector("#win-overlay").style.display = "none";
+  refreshPage();
+}
