@@ -46,10 +46,15 @@ nav{
 }
 .box{
     /* background-color:  rgb(171, 192, 96); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-color: #f4eded66;
     border-width: 0.5px;
     border-style: solid;
     border-radius: 7px;
+    font-weight: 600;
+    font-size: x-large;
     
     
 

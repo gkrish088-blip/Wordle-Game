@@ -5246,8 +5246,9 @@ function handleAlphaInput(alpha) {
   if (isrowComplete) {
     return;
   }
-  grid[currentRow][currentCol].innerHTML = `${alpha}`;
-  grid[currentRow][currentCol].id = `${alpha}-${currentRow}`
+  grid[currentRow][currentCol].innerHTML = `${String(alpha).toUpperCase()}`;
+  //grid[currentRow][currentCol].id = `${alpha}-${currentRow}`
+
   currentGuess = currentGuess + alpha;
   if (currentCol == 5) {
     isrowComplete = true;
@@ -5306,37 +5307,6 @@ function handleEnter(guess, target) {
   }
 }
 
-// var Colored = false;
-
-// function addingColors(guess, target) {
-//   var GreenColored = [];
-//   var Yellowcolored = [];
-
-//   for (let i = 0; i < 6; i++) {
-//     // if(guess[i] == target[i]){
-//     //     grid[currentRow][i].style.backgroundColor = "#538D4E"
-//     // }
-//     for (let j = 0; j < 6; j++) {
-//       if (guess[i] == target[j]) {
-//         if (i == j) {
-//           grid[currentRow][i].style.backgroundColor = "#538D4E";
-//           Colored = true;
-//         } else {
-//           grid[currentRow][i].style.backgroundColor = "#B59F3B";
-//           Colored = true;
-//         }
-//       } else if (!Colored) {
-//         console.log(grid[currentRow][i].innerText.toUpperCase());
-//         grid[currentRow][i].style.backgroundColor = "#3A3A3C";
-
-//         document.querySelector(`.${(String(grid[currentRow][i].innerText).toUpperCase())}`).style.backgroundColor = "#3A3A3A"
-//       }
-//     }
-
-//     Colored = false;
-//   }
-// }
-
 let keyStates = Array(26).fill(0);
 
 let greenIndex = []
@@ -5355,7 +5325,7 @@ function addingColors(guess, target) {
         if(i == j)
         {
           grid[currentRow][i].style.backgroundColor = "#538D4E";
-          
+          grid[currentRow][i].id = ""
           keyStates[guess[i].charCodeAt(0) - 65] = 3;
         
           greenIndex.push(i)
@@ -5403,28 +5373,27 @@ function addingColors(guess, target) {
 
 }
 function handleYellow(guess){
-  var newTr = Target;
+  var newTr = [...Target];
   for (let i = 0; i < greenIndex.length; i++) {
-    newTr = String(newTr).replace(String(newTr[greenIndex[i]]),".")    
+    newTr[greenIndex[i]] = null; 
   }
-  newTr = newTr.replaceAll("." , "")
   console.log(newTr)
-  var newGuess = guess;
+  var newGuess = [...guess];
     for (let i = 0; i < greenIndex.length; i++) {
-    newGuess = String(newGuess).replace(String(newGuess[greenIndex[i]]),".")    
+    newGuess[greenIndex[i]] = null  
   }
-  newGuess = newGuess.replaceAll(".","")
-
   console.log(newGuess)
 
   for (let i = 0; i < newGuess.length; i++) {
     for (let j = 0; j < newTr.length; j++) {
      if(newGuess[i] == newTr[j]){
-      console.log(`${newGuess[i]} is Yellow`)
-      document.querySelector(`#${newGuess[i].toLowerCase()}-${currentRow}`).style.backgroundColor = "#B59F3B"
-      document.querySelector(`.${newGuess[i].toUpperCase()}`).style.backgroundColor = "#B59F3B"
-      newTr = String(newTr).replace(String(newTr[j]),"")
-      newGuess = String(newGuess).replace(String(newGuess[i]),"")
+      console.log(`${newGuess[i]}${i} is Yellow`)
+      //document.querySelector(`#${newGuess[i].toLowerCase()}-${currentRow}`).style.backgroundColor = "#B59F3B"
+      //document.querySelector(`.${newGuess[i].toUpperCase()}`).style.backgroundColor = "#B59F3B"
+      if(newGuess[i]){
+      grid[currentRow][i].style.backgroundColor = "#B59F3B"}
+      newTr[j] = null
+      newGuess[j] = null
      }
     }
     
