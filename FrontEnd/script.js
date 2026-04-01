@@ -5222,9 +5222,6 @@ function onclickKeyboardKey(element) {
   handleInput(keyout);
 }
 //document.addEventListener("keydown" , onclickKeyboardKey)
-document.addEventListener("keydown", (e) => {
-  handleInput(e.key);
-});
 
 function handleInput(key) {
   if (key.charCodeAt(0) <= 122 && key.charCodeAt(0) >= 97) {
@@ -5420,11 +5417,19 @@ function addingBorderToCurrentCell(command) {
   }
 }
 
-startgame();
-gameplay();
+// startgame();
+// gameplay();
 
 function winningfn() {
   document.querySelector("#win-overlay").style.display = "flex";
+  const savedUser = JSON.parse(localStorage.getItem("user"))
+    savedUser.totalWins++
+    savedUser.winStreak++
+     localStorage.setItem("user", JSON.stringify(savedUser));
+    
+
+
+
 }
 function loosingfn() {
   document.querySelector(".win-modal").innerHTML = `
@@ -5432,6 +5437,10 @@ function loosingfn() {
             <p>Better luck next time</p>
             <button onclick="closeWinModal()">Close</button>`;
   document.querySelector("#win-overlay").style.display = "flex";
+    const savedUser = JSON.parse(localStorage.getItem("user"))
+    savedUser.winStreak = 0;
+         localStorage.setItem("user", JSON.stringify(savedUser));
+
 }
 async function notInDictionary() {
   document.querySelector(".message-overlay").style.display = "flex";
@@ -5443,3 +5452,61 @@ function closeWinModal() {
   document.querySelector("#win-overlay").style.display = "none";
   refreshPage();
 }
+let gameReady = false;
+ function main(){
+  const user = {
+    username:"",
+    totalWins: 0,
+    winStreak: 0,
+  }
+  if(localStorage.getItem('user') == null){
+    document.querySelector(".welcome-overlay").style.display = "flex"
+    const form = document.querySelector("#welcome-form")
+    form.addEventListener("submit" , (e)=>{
+      e.preventDefault()
+      const formData = new FormData(form)
+      const name = formData.get("name").trim()
+
+      if (name === "" ) {
+        document.querySelector(".notes-for-form").innerText = "Enter a valid name "
+        return        
+      }
+
+        user.username = name
+        localStorage.setItem("user" , JSON.stringify(user));
+      
+      document.querySelector(".welcome-overlay").style.display = "none"
+      // const user = JSON.parse(localStorage.getItem("user"))
+      document.querySelector(".spaceInNav").innerText = `Welcome back ${user.username}`
+      document.querySelector("#statName").innerText = `${user.username}`
+      gameReady = true
+    })
+
+  }else{
+    const savedUser = JSON.parse(localStorage.getItem("user"))
+    document.querySelector(".spaceInNav").innerText = `Welcome back ${savedUser.username}`
+          document.querySelector("#statName").innerText = ` ${savedUser.username}`
+
+    gameReady = true
+  }
+
+}
+function toggleStats(){
+  const totalWinsdiv = document.querySelector("#statWins")
+  const winStreakdiv = document.querySelector("#statStreak")
+  const savedUser = JSON.parse(localStorage.getItem("user"))
+  totalWinsdiv.innerText = ` ${savedUser.totalWins}`
+  winStreakdiv.innerText = ` ${savedUser.winStreak}`
+  document.querySelector(".stats-panel").style.display = "flex"
+}
+function closeStats(){
+    document.querySelector(".stats-panel").style.display = "none"
+
+}
+main()
+document.addEventListener("keydown", (e) => {
+  if(gameReady){
+  handleInput(e.key);}
+});
+startgame();
+gameplay();
