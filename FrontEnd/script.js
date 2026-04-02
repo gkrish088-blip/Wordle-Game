@@ -5466,9 +5466,10 @@ let gameReady = false;
       e.preventDefault()
       const formData = new FormData(form)
       const name = formData.get("name").trim()
+      const onlyLetters = /^[a-zA-Z]+$/.test(name);
 
-      if (name === "" ) {
-        document.querySelector(".notes-for-form").innerText = "Enter a valid name "
+      if (!onlyLetters) {
+        document.querySelector(".notes-for-form").innerHTML = `Enter a valid name `
         return        
       }
 
