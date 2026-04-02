@@ -5466,7 +5466,7 @@ let gameReady = false;
       e.preventDefault()
       const formData = new FormData(form)
       const name = formData.get("name").trim()
-      const onlyLetters = /^[a-zA-Z]+$/.test(name);
+      const onlyLetters = /^[a-zA-Z]+$/.test(name.replaceAll(" " , ""));
 
       if (!onlyLetters) {
         document.querySelector(".notes-for-form").innerHTML = `Enter a valid name `

@@ -13,7 +13,13 @@
   <body>
     <nav>
       <div class="nav1">
-        <i class="fa-solid fa-bars" style="color: rgb(255, 255, 255)"></i>
+        <a href="https://forge-build-week2.vercel.app/" target="_blank">
+          <i
+            class="fa-solid fa-bars"
+            style="color: rgb(255, 255, 255); cursor: pointer"
+          >
+          </i>
+        </a>
       </div>
       <div class="spaceInNav"></div>
       <div class="nav2">
@@ -29,7 +35,7 @@
           class="fa-solid fa-chart-simple"
           id="stats-button"
           onclick="toggleStats()"
-          style="color: rgb(255, 255, 255); padding-right: 5% ; cursor: pointer;"
+          style="color: rgb(255, 255, 255); padding-right: 5%; cursor: pointer"
         ></i>
         <i
           class="fa-solid fa-circle-question"
@@ -37,7 +43,14 @@
         ></i>
       </div>
       <div class="stats-panel" id="statspanel">
-        <h3>Your Stats <i class="fa-solid fa-xmark" style="color: rgb(255, 255, 255); cursor: pointer;" onclick="closeStats()"></i></h3>
+        <h3>
+          Your Stats
+          <i
+            class="fa-solid fa-xmark"
+            style="color: rgb(255, 255, 255); cursor: pointer"
+            onclick="closeStats()"
+          ></i>
+        </h3>
         <div class="stat-row">
           <span>Player : </span>
           <span id="statName">-</span>
@@ -319,9 +332,8 @@
           <label for="name">Enter Name :- </label>
           <input type="text" name="name" id="name" />
           <input type="submit" value="Submit" />
-            <div class="notes-for-form"></div>
+          <div class="notes-for-form"></div>
         </form>
-        
       </div>
     </div>
     <script src="script.js"></script>
