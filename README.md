@@ -121,4 +121,8 @@ open index.html
 
 ---
 
+##Demo Video
+```
+https://youtu.be/zrfullVDXHc?si=RrK-bJj9qKMnhzcG
+```
 Built by Krish. Portfolio linked in the top left.
